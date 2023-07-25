@@ -12,19 +12,20 @@ NAME
     OCR_with_format
 
 SYNOPSIS
-    OCR_with_format IMG_PATH THRESHOLDING_METHOD <flags>
+    OCR_with_format IMG_PATH <flags>
 
 POSITIONAL ARGUMENTS
     IMG_PATH
         Type: str
         path to the image you want to do OCR on
-    THRESHOLDING_METHOD
+
+FLAGS
+    --thresholding_method=THRESHOLDING_METHOD
         Type: str
+        Default: 'otsu'
         any from "otsu", "otsu_gaussian", "adaptative_gaussian", "all"
 
         If "all", the three methods will be tried and the final output will be the one which maximizes the mean and median confidences over each parsed words.
-
-FLAGS
     -l, --language=LANGUAGE
         Type: str
         Default: 'eng'
@@ -33,7 +34,7 @@ FLAGS
         Type: Optional[str]
         Default: None
         if not None, will output to this path and erase its previous content.
-    -t, --tesseract_args=TESSERACT_ARGS
+    --tesseract_args=TESSERACT_ARGS
         Type: str
         Default: '-...
         default arguments for tesseract

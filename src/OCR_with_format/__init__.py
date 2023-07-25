@@ -39,7 +39,7 @@ def _do_ocr(img, lang, args):
 
 def OCR_with_format(
         img_path: str,
-        thresholding_method: str,
+        thresholding_method: str = "otsu",
         language: str = "eng",
         output_path: str = None,
         tesseract_args: str = "--oem 3 --psm 11 -c preserve_interword_spaces=1",
@@ -52,7 +52,7 @@ def OCR_with_format(
     img_path: str
         path to the image you want to do OCR on
 
-    thresholding_method: str
+    thresholding_method: str, default otsu
         any from "otsu", "otsu_gaussian", "adaptative_gaussian", "all"
 
         If "all", the three methods will be tried and the final output will be
