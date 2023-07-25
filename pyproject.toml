@@ -1,0 +1,35 @@
+# pyproject.toml
+
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "OCR_with_format"
+version = "0.1"
+description = "Wrapper to pytesseract to preserve space and formatting"
+readme = "README.md"
+authors = [{ name = "thiswillbeyourgithub"}]
+license = { file = "LICENSE" }
+classifiers = [
+    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+]
+keywords = ["OCR", "tesseract", "pytesseract", "format", "formatting", "space", "spacing", "spaces"]
+dependencies = [
+    "beautifulsoup4==4.10.0",
+    "fire>=0.5.0",
+    "ftfy>=6.1.1",
+    "numpy>=1.21.5",
+    "opencv-python>=4.7.0.72",
+    "pytesseract>=0.3.10",
+]
+requires-python = ">=3.9"
+
+[project.urls]
+Homepage = "https://github.com/thiswillbeyourgithub/OCR_with_format"
+
+[project.scripts]
+OCR_with_format = "__init__:cli"
