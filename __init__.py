@@ -41,6 +41,7 @@ def OCR_with_format(
         output_path: str = None,
         tesseract_args: str = "--oem 3 --psm 11 -c preserve_interword_spaces=1",
         quiet=False,
+        comparison_run=False,
         ):
     """
     Parameters
@@ -64,6 +65,10 @@ def OCR_with_format(
     quiet: bool, default False
         if True, will only print the output and no logs
 
+    comparison_run: bool, default False
+        if True, will just output the raw output from pytesseract. This
+        can be used to convince yourself of the usefullness of this project.
+
     """
     if quiet:
         pr = lambda x: None
@@ -81,8 +86,15 @@ def OCR_with_format(
     # preprocess several times then OCR, keep the one with the highest median confidence
     preprocessings = {}
 
-    # sharpen a bit for testing
-    gray_sharp = cv2.addWeighted(gray, 1.5, cv2.GaussianBlur(gray, (0,0), 10), -0.5, 0)
+    # sharpen a bit
+    gray_sharp = cv2.addWeighted(gray, 1.5, cv2.GaussianBlur(gray, (0, 0), 10), -0.5, 0)
+
+    if comparison_run:
+        return pytesseract.image_to_string(
+                gray_sharp,
+                lang="fra",
+                config=tesseract_args,
+                )
 
     # source:
     # https://opencv24-python-tutorials.readthedocs.io/en/latest/py_tutorials/py_imgproc/py_thresholding/py_thresholding.html#otsus-binarization
