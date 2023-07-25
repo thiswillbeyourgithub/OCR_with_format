@@ -95,7 +95,7 @@ def OCR_with_format(
 
     if comparison_run:
         return pytesseract.image_to_string(
-                gray_sharp,
+                img,
                 lang=language,
                 config=tesseract_args,
                 )
