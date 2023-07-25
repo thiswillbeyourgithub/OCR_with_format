@@ -1,6 +1,10 @@
 # OCR_with_format
 * simple wrapper that postprocesses pytesseract's hOCR output to maintain format and spacings.
 
+## How to
+* install `python -m pip install OCR_with_format`
+* see usage `python -m OCR_with_format --help`
+
 ## Example
 
 * Image:
