@@ -32,4 +32,4 @@ requires-python = ">=3.9"
 Homepage = "https://github.com/thiswillbeyourgithub/OCR_with_format"
 
 [project.scripts]
-OCR_with_format = "__init__:cli"
+OCR_with_format = "OCR_with_format:cli"
