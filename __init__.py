@@ -296,5 +296,9 @@ def OCR_with_format(
         return output_str
 
 
+def cli():
+    fire.Fire(OCR_with_format)
+
+
 if __name__ == "__main__":
     out = fire.Fire(OCR_with_format)
