@@ -3,7 +3,7 @@
 
 ## How to
 * install `python -m pip install OCR_with_format`
-* see usage `python -m OCR_with_format --help`
+* see usage `OCR_with_format --help` (executing with `python -m` is not supported)
 
 ## Example
 
