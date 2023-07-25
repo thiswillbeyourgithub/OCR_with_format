@@ -35,7 +35,7 @@ def _do_ocr(img, args):
             )
 
 
-def OCR_with_sane_formatting(
+def OCR_with_format(
         img_path: str,
         thresholding_method: str,
         tesseract_args: str = "--oem 3 --psm 11 -c preserve_interword_spaces=1",
@@ -270,4 +270,4 @@ def OCR_with_sane_formatting(
 
 
 if __name__ == "__main__":
-    out = fire.Fire(OCR_with_sane_formatting)
+    out = fire.Fire(OCR_with_format)
