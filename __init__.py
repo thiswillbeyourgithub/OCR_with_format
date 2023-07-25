@@ -12,6 +12,8 @@ bbox_regex = re.compile(r'bbox\s(\d+)\s(\d+)\s(\d+)\s(\d+)')
 confidence_regex = re.compile(r'x_wconf\s(\d+)')
 newlines_regex = re.compile(r'\n\s*\n')
 
+__version__ = "0.1"
+
 # msic
 
 def _get_wdim(ocrx_word):
