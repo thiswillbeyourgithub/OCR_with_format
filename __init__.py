@@ -38,6 +38,7 @@ def _do_ocr(img, args):
 def OCR_with_format(
         img_path: str,
         thresholding_method: str,
+        output_path: str = None,
         tesseract_args: str = "--oem 3 --psm 11 -c preserve_interword_spaces=1",
         quiet=False,
         ):
@@ -53,6 +54,9 @@ def OCR_with_format(
         If "all", the three methods will be tried and the final output will be
         the one which maximizes the mean and median confidences over
         each parsed words.
+
+    output_path: str, default None
+        if not None, will output to this path and erase its previous content.
 
     tesseract_args: str, default "--oem 3 --psm 11 -c preserve_interword_spaces=1"
         default arguments for tesseract
@@ -266,7 +270,12 @@ def OCR_with_format(
     # just in case
     output_str = ftfy.fix_text(output_str)
 
-    return output_str
+    if output_path:
+        with open(output_path, "w") as f:
+            f.write(output_str)
+        pr(f"Output written to '{output_path}'")
+    else:
+        return output_str
 
 
 if __name__ == "__main__":
