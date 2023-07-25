@@ -39,81 +39,33 @@ OCR_with_format
 
 -] [ ¢ s (0
 
--
+¥ main ~
 
-&
-
-   About
-
-¥ Branches
-
-© Tags
+¥ Branches © Tags
 
 Wrapper around pytesseract to
-
 postprocess in a way that preserves
 
-spacing and formattings.
-
-i thiswillbeyourgithub addded license
-
-10 minutes ago 'O 4
-
+. . . spacing and formattings.
+- thiswillbeyourgithub addded license 10 minutes ago 'O 4
 &5 GPL-3.0 license
-
-addded license
-
-10 minutes ago
-
-@ LICENSE
-
-A- Activity
-
-s
-
-__init__.py
-
-minor
-
-11 minutes ago
-
-¢ Ostars
-
-s
-
-requirements.txt
-
-added empty requirements
-
-11 minutes ago
-
-® 1 watching
-
+@ LICENSE addded license 10 minutes ago A Activity
+0O _init__py minor 11 minutes ago ¢ Ostars
+O requirements.txt added empty requirements 11 minutes ago | @ 1watching
 % 0forks
-
 Help people interested in this repository understand your project by
-
-Add a
-
-ADME
-
-adding a README.
-
-Releases
+adding a README. Releases
 
 No releases published
-
 Create a new release
 
 Packages
 
 No packages published
-
 Publish your first package
 
 Languages
 
 ————
-
 @ Python 100.0%
 ```
