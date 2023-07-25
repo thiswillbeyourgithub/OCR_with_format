@@ -51,7 +51,7 @@ NOTES
 
 * Image:
   * ![](https://github.com/thiswillbeyourgithub/OCR_with_format/blob/295e724b758045dc952934b6f0d98172fdc9a12e/screenshot.png?raw=true)
-* output from `python ./__init__.py ./screenshot.png --thresholding_method="all"  --quiet`
+* output from `OCR_with_format ./screenshot.png --thresholding_method="all"  --quiet`
 ```
                                                                     @Unwateh (1) ~        Fork (3)                  (©
     OCR_with_format                          [     Pir ][                   | [  &            <) [     s        -]
@@ -76,7 +76,7 @@ NOTES
                                                                                           ———
                                                                                            ® Python 100.0%
 ```
-* output from `python ./__init__.py ./screenshot.png --quiet --comparison_run`
+* output from `OCR_with_format ./screenshot.png --quiet --comparison_run`
   *
 ```
 OCR_with_format
