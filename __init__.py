@@ -97,7 +97,7 @@ def OCR_with_format(
         return pytesseract.image_to_string(
                 img,
                 lang=language,
-                config=tesseract_args,
+                config="",
                 )
 
     # source:
