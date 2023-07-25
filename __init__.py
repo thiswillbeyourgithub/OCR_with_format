@@ -25,11 +25,11 @@ def _get_wconf(ocrx_word):
     return int(out)
 
 
-def _do_ocr(img, args):
+def _do_ocr(img, lang, args):
     "run OCR on the image by pytesseract"
     return pytesseract.image_to_pdf_or_hocr(
             img,
-            lang="fra",
+            lang=lang,
             config=args,
             extension="hocr",
             )
@@ -38,6 +38,7 @@ def _do_ocr(img, args):
 def OCR_with_format(
         img_path: str,
         thresholding_method: str,
+        language: str = "eng",
         output_path: str = None,
         tesseract_args: str = "--oem 3 --psm 11 -c preserve_interword_spaces=1",
         quiet=False,
@@ -55,6 +56,9 @@ def OCR_with_format(
         If "all", the three methods will be tried and the final output will be
         the one which maximizes the mean and median confidences over
         each parsed words.
+
+    language: str, default eng
+        language to look for in the image
 
     output_path: str, default None
         if not None, will output to this path and erase its previous content.
@@ -92,7 +96,7 @@ def OCR_with_format(
     if comparison_run:
         return pytesseract.image_to_string(
                 gray_sharp,
-                lang="fra",
+                lang=language,
                 config=tesseract_args,
                 )
 
@@ -131,7 +135,7 @@ def OCR_with_format(
     max_mean = 0  # mean
     for method, value in preprocessings.items():
         # use pytesseract to get the text
-        hocr_temp = _do_ocr(value["image"], args=tesseract_args)
+        hocr_temp = _do_ocr(value["image"], lang=language, args=tesseract_args)
 
         # load hOCR content as html
         soup = BeautifulSoup(hocr_temp, 'html.parser')
