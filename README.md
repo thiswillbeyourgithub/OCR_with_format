@@ -1,5 +1,6 @@
 # OCR_with_format
 * simple wrapper that postprocesses pytesseract's hOCR output to maintain format and spacings.
+* [Link to an alternative implementation found on stackoverflow](https://stackoverflow.com/questions/59582008/preserving-indentation-with-tesseract-ocr-4-x)
 
 ## How to
 * install `python -m pip install OCR_with_format`
