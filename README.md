@@ -8,7 +8,7 @@
 ## Example
 
 * Image:
-  * ![image](./screenshot.png)
+  * ![](https://github.com/thiswillbeyourgithub/OCR_with_format/blob/295e724b758045dc952934b6f0d98172fdc9a12e/screenshot.png?raw=true)
 * output from `python ./__init__.py ./screenshot.png --thresholding_method="all"  --quiet`
 ```
                                                                     @Unwateh (1) ~        Fork (3)                  (©
