@@ -5,6 +5,48 @@
 * install `python -m pip install OCR_with_format`
 * see usage `OCR_with_format --help` (executing with `python -m` is not supported)
 
+## Usage
+```
+NAME
+    OCR_with_format
+
+SYNOPSIS
+    OCR_with_format IMG_PATH THRESHOLDING_METHOD <flags>
+
+POSITIONAL ARGUMENTS
+    IMG_PATH
+        Type: str
+        path to the image you want to do OCR on
+    THRESHOLDING_METHOD
+        Type: str
+        any from "otsu", "otsu_gaussian", "adaptative_gaussian", "all"
+
+        If "all", the three methods will be tried and the final output will be the one which maximizes the mean and median confidences over each parsed words.
+
+FLAGS
+    -l, --language=LANGUAGE
+        Type: str
+        Default: 'eng'
+        language to look for in the image
+    -o, --output_path=OUTPUT_PATH
+        Type: Optional[str]
+        Default: None
+        if not None, will output to this path and erase its previous content.
+    -t, --tesseract_args=TESSERACT_ARGS
+        Type: str
+        Default: '-...
+        default arguments for tesseract
+    -q, --quiet=QUIET
+        Default: False
+        if True, will only print the output and no logs
+    -c, --comparison_run=COMPARISON_RUN
+        Default: False
+        if True, will just output the raw output from pytesseract. This can be used to convince yourself of the usefullness of this project.
+
+NOTES
+    You can also use flags syntax for POSITIONAL ARGUMENTS
+```
+
 ## Example
 
 * Image:
