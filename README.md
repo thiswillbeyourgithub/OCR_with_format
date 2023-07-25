@@ -4,7 +4,7 @@
 ## Example
 
 * Image:
-  * [!image](./screenshot.png)
+  * ![image](./screenshot.png)
 * output from `python ./__init__.py ./screenshot.png --thresholding_method="all"  --quiet`
 ```
                                                                     @Unwateh (1) ~        Fork (3)                  (©
@@ -31,7 +31,8 @@
                                                                                            ® Python 100.0%
 ```
 * output from `python ./__init__.py ./screenshot.png --quiet --comparison_run`
-  * ```
+  *
+```
 OCR_with_format
 
 [ pin | [ @unwateh (@) ~ | [ & Fork (O)
@@ -115,4 +116,4 @@ Languages
 ————
 
 @ Python 100.0%
-  ```
+```
