@@ -1,11 +1,13 @@
 import fire
 import pytesseract
+from pytesseract import Output
 import ftfy
 import numpy as np
 import cv2
 from bs4 import BeautifulSoup
 import re
 from textwrap import dedent
+import pandas as pd
 
 # pre compiled regex
 bbox_regex = re.compile(r'bbox\s(\d+)\s(\d+)\s(\d+)\s(\d+)')
@@ -36,21 +38,69 @@ def _do_ocr(img, lang, args):
             extension="hocr",
             )
 
+def stackoverflow_method(img, lang, args):
+    d = pytesseract.image_to_data(
+            img,
+            lang=lang,
+            config=args,
+            output_type=Output.DICT,
+            )
+    df = pd.DataFrame(d)
+
+    # clean up blanks
+    df1 = df[(df.conf!='-1')&(df.text!=' ')&(df.text!='')]
+    # sort blocks vertically
+    sorted_blocks = df1.groupby('block_num').first().sort_values('top').index.tolist()
+    output = []
+    for block in sorted_blocks:
+        curr = df1[df1['block_num']==block]
+        sel = curr[curr.text.str.len()>3]
+        char_w = (sel.width/sel.text.str.len()).mean()
+        prev_par, prev_line, prev_left = 0, 0, 0
+        text = ''
+        for ix, ln in curr.iterrows():
+            # add new line when necessary
+            if prev_par != ln['par_num']:
+                text += '\n'
+                prev_par = ln['par_num']
+                prev_line = ln['line_num']
+                prev_left = 0
+            elif prev_line != ln['line_num']:
+                text += '\n'
+                prev_line = ln['line_num']
+                prev_left = 0
+
+            added = 0  # num of spaces that should be added
+            if ln['left']/char_w > prev_left + 1:
+                added = int((ln['left'])/char_w) - prev_left
+                text += ' ' * added
+            text += ln['text'] + ' '
+            prev_left += len(ln['text']) + added + 1
+        #text += '\n'
+        output.append(text)
+    return "\n".join(output)
+
 
 def OCR_with_format(
         img_path: str,
+        method: str = "with_format",
         thresholding_method: str = "otsu",
         language: str = "eng",
         output_path: str = None,
         tesseract_args: str = "--oem 3 --psm 11 -c preserve_interword_spaces=1",
         quiet=False,
-        comparison_run=False,
         ):
     """
     Parameters
     ----------
     img_path: str
         path to the image you want to do OCR on
+
+    method: str, default 'with_format'
+        if 'with_format', will use the author's code
+        if 'none', will output tesseract's default output
+        if 'stackoverflow', will output using another algorithm found on stackoverflow
+        source : https://stackoverflow.com/questions/59582008/preserving-indentation-with-tesseract-ocr-4-x
 
     thresholding_method: str, default otsu
         any from "otsu", "otsu_gaussian", "adaptative_gaussian", "all"
@@ -70,10 +120,6 @@ def OCR_with_format(
 
     quiet: bool, default False
         if True, will only print the output and no logs
-
-    comparison_run: bool, default False
-        if True, will just output the raw output from pytesseract. This
-        can be used to convince yourself of the usefullness of this project.
 
     """
     if quiet:
@@ -95,11 +141,20 @@ def OCR_with_format(
     # sharpen a bit
     gray_sharp = cv2.addWeighted(gray, 1.5, cv2.GaussianBlur(gray, (0, 0), 10), -0.5, 0)
 
-    if comparison_run:
+    if method == "none" or not method:
+        pr("Using default tesseract method")
         return pytesseract.image_to_string(
                 img,
                 lang=language,
-                config="",
+                config=tesseract_args,
+                )
+
+    if method == "stackoverflow":
+        pr("Using method found on stackoverflow")
+        return stackoverflow_method(
+                img,
+                lang=language,
+                args=tesseract_args,
                 )
 
     # source:
