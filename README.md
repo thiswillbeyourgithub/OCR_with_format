@@ -20,6 +20,10 @@ POSITIONAL ARGUMENTS
         path to the image you want to do OCR on
 
 FLAGS
+    -m, --method=METHOD
+        Type: str
+        Default: 'with_format'
+        if 'with_format', will use the author's code if 'none', will output tesseract's default output if 'stackoverflow', will output using another algorithm found on stackoverflow
     --thresholding_method=THRESHOLDING_METHOD
         Type: str
         Default: 'otsu'
@@ -41,12 +45,10 @@ FLAGS
     -q, --quiet=QUIET
         Default: False
         if True, will only print the output and no logs
-    -c, --comparison_run=COMPARISON_RUN
-        Default: False
-        if True, will just output the raw output from pytesseract. This can be used to convince yourself of the usefullness of this project.
 
 NOTES
     You can also use flags syntax for POSITIONAL ARGUMENTS
+
 ```
 
 ## Example
