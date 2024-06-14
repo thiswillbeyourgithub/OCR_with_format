@@ -101,7 +101,7 @@ class OCR_with_format:
         # sharpen a bit
         gray_sharp = cv2.addWeighted(gray, 1.5, cv2.GaussianBlur(gray, (0, 0), 10), -0.5, 0)
 
-        if method == "none" or not method:
+        if str(method).lower() == "none" or not method:
             pr("Using default tesseract method")
             return pytesseract.image_to_string(
                     img,
@@ -152,7 +152,11 @@ class OCR_with_format:
         max_mean = 0  # mean
         for method, value in preprocessings.items():
             # use pytesseract to get the text
-            hocr_temp = self._do_ocr(value["image"], lang=language, args=tesseract_args)
+            hocr_temp = self._do_ocr(
+                value["image"],
+                lang=language,
+                args=tesseract_args,
+            )
 
             # load hOCR content as html
             soup = BeautifulSoup(hocr_temp, 'html.parser')
@@ -337,6 +341,9 @@ class OCR_with_format:
 
     @typechecked
     def stackoverflow_method(self, img: np.ndarray, lang: str, args: str) -> str:
+        """
+        source : https://stackoverflow.com/questions/59582008/preserving-indentation-with-tesseract-ocr-4-x
+        """
         d = pytesseract.image_to_data(
                 img,
                 lang=lang,
