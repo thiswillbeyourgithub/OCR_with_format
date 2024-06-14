@@ -110,7 +110,8 @@ def OCR_with_format(
         each parsed words.
 
     language: str, default eng
-        language to look for in the image
+        language to look for in the image.
+        Format must be in 3 letter words, can be combined using '+' like in 'eng+fra'
 
     output_path: str, default None
         if not None, will output to this path and erase its previous content.
