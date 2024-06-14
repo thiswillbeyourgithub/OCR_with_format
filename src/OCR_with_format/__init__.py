@@ -8,7 +8,9 @@ from bs4 import BeautifulSoup
 import re
 from textwrap import dedent
 import pandas as pd
-from pathlib import Path
+from pathlib import Path, PosixPath
+from typeguard import typechecked
+from typing import Union, Optional
 
 # pre compiled regex
 bbox_regex = re.compile(r'bbox\s(\d+)\s(\d+)\s(\d+)\s(\d+)')
@@ -82,15 +84,18 @@ def stackoverflow_method(img, lang, args):
     return "\n".join(output)
 
 
+@typechecked
 def OCR_with_format(
-        img_path: str,
-        method: str = "with_format",
-        thresholding_method: str = "otsu",
-        language: str = "eng",
-        output_path: str = None,
-        tesseract_args: str = "--oem 3 --psm 11 -c preserve_interword_spaces=1",
-        quiet=False,
-        ):
+    img_path: Union[str, PosixPath],
+    method: str = "with_format",
+    thresholding_method: str = "otsu",
+    language: str = "eng",
+    output_path: Optional[Union[str, PosixPath]] = None,
+    tesseract_args: str = "--oem 3 --psm 11 -c preserve_interword_spaces=1",
+    quiet: bool = False,
+    h: bool = False,
+    help: bool = False,
+    ):
     """
     Parameters
     ----------
@@ -123,11 +128,17 @@ def OCR_with_format(
     quiet: bool, default False
         if True, will only print the output and no logs
 
+    h/help: bool, default False
+        display this help
+
     """
     if quiet:
         pr = lambda x: None
     else:
         pr = print
+    if h or help:
+        print(OCR_with_format.__doc__)
+        raise SystemExit()
     assert Path(img_path).exists(), f"File not found: '{img_path}'"
     img = cv2.imread(img_path, flags=1)
 
