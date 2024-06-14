@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 import re
 from textwrap import dedent
 import pandas as pd
+from pathlib import Path
 
 # pre compiled regex
 bbox_regex = re.compile(r'bbox\s(\d+)\s(\d+)\s(\d+)\s(\d+)')
@@ -127,6 +128,7 @@ def OCR_with_format(
         pr = lambda x: None
     else:
         pr = print
+    assert Path(img_path).exists(), f"File not found: '{img_path}'"
     img = cv2.imread(img_path, flags=1)
 
     # remove alpha layer if found
