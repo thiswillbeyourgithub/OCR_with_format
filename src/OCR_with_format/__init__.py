@@ -12,7 +12,7 @@ from pathlib import Path
 
 # import types
 from pathlib import PosixPath
-from typeguard import typechecked
+from beartype import beartype
 from typing import Union, Optional, List
 import bs4
 
@@ -25,11 +25,11 @@ newlines_regex = re.compile(r'\n\s*\n')
 class OCR_with_format:
     __version__ = "0.10"
 
-    @typechecked
+    @beartype
     def __init__(self)-> None:
         return
 
-    @typechecked
+    @beartype
     def OCR(
         self,
         img_path: Union[str, PosixPath],
@@ -316,20 +316,20 @@ class OCR_with_format:
         else:
             return output_str
 
-    @typechecked
+    @beartype
     def _get_wdim(self, ocrx_word: bs4.element.Tag) -> List[int]:
         "parse the dimansion of the word from the ocrx object"
         return [int(x) for x in re.findall(bbox_regex, ocrx_word["title"])[0]]
 
 
-    @typechecked
+    @beartype
     def _get_wconf(self, ocrx_word: bs4.element.Tag) -> int:
         "parse the confidence on the word from the ocrx object"
         out = re.findall(confidence_regex, ocrx_word["title"])[0]
         return int(out)
 
 
-    @typechecked
+    @beartype
     def _do_ocr(self, img: np.ndarray, lang: str, args: str) -> bytes:
         "run OCR on the image by pytesseract"
         return pytesseract.image_to_pdf_or_hocr(
@@ -339,7 +339,7 @@ class OCR_with_format:
                 extension="hocr",
                 )
 
-    @typechecked
+    @beartype
     def stackoverflow_method(self, img: np.ndarray, lang: str, args: str) -> str:
         """
         source : https://stackoverflow.com/questions/59582008/preserving-indentation-with-tesseract-ocr-4-x
@@ -386,7 +386,7 @@ class OCR_with_format:
         return "\n".join(output)
 
 
-# @typechecked
+# @beartype
 def cli() -> None:
     out = fire.Fire(OCR_with_format().OCR)
     return

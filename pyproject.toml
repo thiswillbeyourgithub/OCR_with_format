@@ -25,6 +25,7 @@ dependencies = [
     "numpy>=1.21.5",
     "opencv-python>=4.7.0.72",
     "pytesseract>=0.3.10",
+    "beartype>=0.18.5",
 ]
 requires-python = ">=3.9"
 
