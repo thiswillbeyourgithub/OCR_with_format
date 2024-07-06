@@ -22,7 +22,7 @@ newlines_regex = re.compile(r'\n\s*\n')
 
 
 class OCR_with_format:
-    __version__ = "0.10"
+    __VERSION__ = "0.10"
 
     @beartype
     def __init__(self)-> None:
