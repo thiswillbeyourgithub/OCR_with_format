@@ -30,7 +30,7 @@ setup(
     python_requires=">=3.9",
     entry_points={
         "console_scripts": [
-            "OCR_with_format=OCR_with_format:cli",
+            "OCR_with_format=OCR_with_format.__init__:cli",
         ],
     },
     project_urls={
