@@ -11,4 +11,4 @@ push = false
 [bumpver.file_patterns]
 "bumpver.toml" = ['current_version = "{version}"']
 "setup.py" = ['version="{version}",']
-"src/OCR_with_format/ocr_with_format.py" = ['__VERSION__: str = "{version}"']
+"OCR_with_format/ocr_with_format.py" = ['__VERSION__: str = "{version}"']
