@@ -25,7 +25,7 @@ setup(
         "numpy>=1.21.5",
         "opencv-python>=4.7.0.72",
         "pytesseract>=0.3.10",
-        "beartype>=0.18.5",
+        "beartype>=0.19.0",
     ],
     python_requires=">=3.9",
     entry_points={
