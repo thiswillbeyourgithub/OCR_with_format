@@ -19,7 +19,7 @@ setup(
     keywords=["OCR", "tesseract", "pytesseract", "format", "formatting", "space", "spacing", "spaces"],
     packages=find_packages(),
     install_requires=[
-        "beautifulsoup4==4.10.0",
+        "beautifulsoup4>=4.10.0",
         "fire>=0.5.0",
         "ftfy>=6.1.1",
         "numpy>=1.21.5",
