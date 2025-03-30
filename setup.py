@@ -26,6 +26,7 @@ setup(
         "opencv-python>=4.7.0.72",
         "pytesseract>=0.3.10",
         "beartype>=0.19.0",
+        "pandas>=2.2.3"
     ],
     python_requires=">=3.9",
     entry_points={
