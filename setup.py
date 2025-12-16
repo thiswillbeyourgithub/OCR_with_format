@@ -10,9 +10,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     author="thiswillbeyourgithub",
-    license="GNU General Public License v3 or later (GPLv3+)",
     classifiers=[
-        "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
     ],
