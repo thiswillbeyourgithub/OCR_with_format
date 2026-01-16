@@ -16,16 +16,16 @@ from typing import Union, Optional, List
 import bs4
 
 # pre compiled regex
-bbox_regex = re.compile(r'bbox\s(\d+)\s(\d+)\s(\d+)\s(\d+)')
-confidence_regex = re.compile(r'x_wconf\s(\d+)')
-newlines_regex = re.compile(r'\n\s*\n')
+bbox_regex = re.compile(r"bbox\s(\d+)\s(\d+)\s(\d+)\s(\d+)")
+confidence_regex = re.compile(r"x_wconf\s(\d+)")
+newlines_regex = re.compile(r"\n\s*\n")
 
 
 @beartype
 class OCR_with_format:
     __VERSION__: str = "0.13"
 
-    def __init__(self)-> None:
+    def __init__(self) -> None:
         return
 
     def OCR(
@@ -39,7 +39,7 @@ class OCR_with_format:
         quiet: bool = False,
         h: bool = False,
         help: bool = False,
-        ) -> Union[str, None]:
+    ) -> Union[str, None]:
         """
         Parameters
         ----------
@@ -100,51 +100,66 @@ class OCR_with_format:
         preprocessings = {}
 
         # sharpen a bit
-        gray_sharp = cv2.addWeighted(gray, 1.5, cv2.GaussianBlur(gray, (0, 0), 10), -0.5, 0)
+        gray_sharp = cv2.addWeighted(
+            gray, 1.5, cv2.GaussianBlur(gray, (0, 0), 10), -0.5, 0
+        )
 
         if str(method).lower() == "none" or not method:
             pr("Using default tesseract method")
             return pytesseract.image_to_string(
-                    img,
-                    lang=language,
-                    config=tesseract_args,
-                    )
+                img,
+                lang=language,
+                config=tesseract_args,
+            )
 
         if method == "stackoverflow":
             pr("Using method found on stackoverflow")
             return self.stackoverflow_method(
-                    img,
-                    lang=language,
-                    args=tesseract_args,
-                    )
+                img,
+                lang=language,
+                args=tesseract_args,
+            )
 
         # source:
         # https://opencv24-python-tutorials.readthedocs.io/en/latest/py_tutorials/py_imgproc/py_thresholding/py_thresholding.html#otsus-binarization
         if thresholding_method in ["otsu", "all"]:
             # Otsu's thresholding
-            _, sharpened = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+            _, sharpened = cv2.threshold(
+                gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU
+            )
             preprocessings["otsu1_nosharp"] = {"image": sharpened}
-            _, sharpened = cv2.threshold(gray_sharp, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+            _, sharpened = cv2.threshold(
+                gray_sharp, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU
+            )
             preprocessings["otsu1_sharp"] = {"image": sharpened}
 
         elif thresholding_method in ["otsu_gaussian", "all"]:
             # # Otsu's thresholding after Gaussian filtering
             blur = cv2.GaussianBlur(gray, (5, 5), 0)
-            _, sharpened = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+            _, sharpened = cv2.threshold(
+                blur, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU
+            )
             preprocessings["otsu2_nosharp"] = {"image": sharpened}
             blur = cv2.GaussianBlur(gray_sharp, (5, 5), 0)
-            _, sharpened = cv2.threshold(blur, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+            _, sharpened = cv2.threshold(
+                blur, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU
+            )
             preprocessings["otsu2_sharp"] = {"image": sharpened}
 
         elif thresholding_method in ["adaptative_gaussian", "all"]:
             # # adaptative gaussian thresholding
             sharpened = cv2.adaptiveThreshold(
-                    gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,
-                    21, -5)
+                gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 21, -5
+            )
             preprocessings["gauss_nosharp"] = {"image": sharpened}
             sharpened = cv2.adaptiveThreshold(
-                    gray_sharp, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,
-                    21, -5)
+                gray_sharp,
+                255,
+                cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+                cv2.THRESH_BINARY,
+                21,
+                -5,
+            )
             preprocessings["gauss_sharp"] = {"image": sharpened}
         else:
             raise Exception(f"Unexpected thresholding_method: '{thresholding_method}'")
@@ -160,10 +175,10 @@ class OCR_with_format:
             )
 
             # load hOCR content as html
-            soup = BeautifulSoup(hocr_temp, 'html.parser')
+            soup = BeautifulSoup(hocr_temp, "html.parser")
 
             # get all words
-            all_words_temp = soup.find_all('span', {'class': 'ocrx_word'})
+            all_words_temp = soup.find_all("span", {"class": "ocrx_word"})
 
             # get confidence
             confidences = []
@@ -181,7 +196,9 @@ class OCR_with_format:
                 all_words = all_words_temp
 
         if thresholding_method == "auto":
-            pr(f"Best preprocessing method: {best_method} with score {max_med:.2f} {max_mean:.2f}")
+            pr(
+                f"Best preprocessing method: {best_method} with score {max_med:.2f} {max_mean:.2f}"
+            )
             for m, v in preprocessings.items():
                 pr(f"* {m}: {v['median']:.2f}  {v['mean']:.2f}")
             del preprocessings
@@ -207,7 +224,9 @@ class OCR_with_format:
         min_h = min(levels)
 
         # figure out from the line indices how how much to ignore as same line
-        sorted_lev = np.array(sorted(levels)[len(levels)//3:len(levels)*2//3])  # focus on middle third
+        sorted_lev = np.array(
+            sorted(levels)[len(levels) // 3 : len(levels) * 2 // 3]
+        )  # focus on middle third
         diff = (sorted_lev - np.roll(sorted_lev, +1))[1:-1]
         try:
             merge_thresh = np.quantile(diff[np.where(diff != 0)], 0.1)
@@ -220,7 +239,9 @@ class OCR_with_format:
         try:
             newline_threshold = np.quantile(diff[np.where(diff > median_height)], 0.5)
         except Exception as err:
-            pr(f"Set newline threshold to median_height because caught exception: '{err}'")
+            pr(
+                f"Set newline threshold to median_height because caught exception: '{err}'"
+            )
             newline_threshold = median_height
         pr(f"Median line diff: {newline_threshold}, median height: {median_height}")
 
@@ -230,7 +251,7 @@ class OCR_with_format:
         scores = {}
         w_todo = all_words
         # skip the first section of the text because it's sometimes headers
-        #w_todo = [w for w in all_words if self._get_wdim(w)[1] > (max_h - min_h) / 5]
+        # w_todo = [w for w in all_words if self._get_wdim(w)[1] > (max_h - min_h) / 5]
         for offset in offset_to_try:
             w_done = []
             scan_lines = [min_h + offset]
@@ -238,7 +259,11 @@ class OCR_with_format:
                 scan_lines.append(scan_lines[-1] + newline_threshold)
             temp = []
             for y_scan in scan_lines:
-                buff = [w for w in w_todo if w not in w_done and all_bbox[w][1] <= y_scan + merge_thresh]
+                buff = [
+                    w
+                    for w in w_todo
+                    if w not in w_done and all_bbox[w][1] <= y_scan + merge_thresh
+                ]
                 if not buff:
                     continue
                 w_done.extend(buff)
@@ -257,7 +282,7 @@ class OCR_with_format:
         scan_lines = [min_h + best_offset]
         while scan_lines[-1] < max_h + best_offset * 2:
             scan_lines.append(scan_lines[-1] + newline_threshold)
-        output_str = ''
+        output_str = ""
         prev_y1 = None
 
         for y_scan in scan_lines:
@@ -272,28 +297,28 @@ class OCR_with_format:
             ocr_words = sorted(buff, key=lambda x: all_bbox[x][0])
 
             # Extract text and format information
-            line_text = ''
+            line_text = ""
             for idx, word in enumerate(ocr_words):
                 text = word.get_text()
                 x0, y0, x1, y1 = all_bbox[word]
 
                 if idx:
-                    prev_x1, prev_y1 = all_bbox[ocr_words[idx-1]][2:4]
-                    spaces_before = ' ' * int(max(1, (x0 - prev_x1) / char_width))
+                    prev_x1, prev_y1 = all_bbox[ocr_words[idx - 1]][2:4]
+                    spaces_before = " " * int(max(1, (x0 - prev_x1) / char_width))
                 else:
-                    spaces_before = ' ' * int(max(1, ((x0) / char_width)))
+                    spaces_before = " " * int(max(1, ((x0) / char_width)))
 
                 confidence = self._get_wconf(word)
 
                 # if confidence < 50:
                 #     tqdm.write(f"* Low confidence: {confidence}: {text}")
 
-                line_text += f'{spaces_before}{text}'
+                line_text += f"{spaces_before}{text}"
 
                 if prev_y1 is not None and abs(y0 - prev_y1) >= newline_threshold:
-                    output_str += '\n'
+                    output_str += "\n"
 
-            output_str += f'{line_text}\n'
+            output_str += f"{line_text}\n"
             prev_y1 = y1
 
         # remove useless indentation
@@ -302,8 +327,8 @@ class OCR_with_format:
         # remove too many newlines
         while "\n\n" in output_str:
             output_str = output_str.replace("\n\n", "\n")
-        #output_str = "\n".join([li for li in output_str.split("\n") if li.strip() != ""])
-        #output_str = re.sub(newlines_regex, '\n', output_str)
+        # output_str = "\n".join([li for li in output_str.split("\n") if li.strip() != ""])
+        # output_str = re.sub(newlines_regex, '\n', output_str)
 
         # just in case
         output_str = ftfy.fix_text(output_str)
@@ -321,63 +346,63 @@ class OCR_with_format:
         "parse the dimansion of the word from the ocrx object"
         return [int(x) for x in re.findall(bbox_regex, ocrx_word["title"])[0]]
 
-
     def _get_wconf(self, ocrx_word: bs4.element.Tag) -> int:
         "parse the confidence on the word from the ocrx object"
         out = re.findall(confidence_regex, ocrx_word["title"])[0]
         return int(out)
 
-
     def _do_ocr(self, img: np.ndarray, lang: str, args: str) -> bytes:
         "run OCR on the image by pytesseract"
         return pytesseract.image_to_pdf_or_hocr(
-                img,
-                lang=lang,
-                config=args,
-                extension="hocr",
-                )
+            img,
+            lang=lang,
+            config=args,
+            extension="hocr",
+        )
 
     def stackoverflow_method(self, img: np.ndarray, lang: str, args: str) -> str:
         """
         source : https://stackoverflow.com/questions/59582008/preserving-indentation-with-tesseract-ocr-4-x
         """
         d = pytesseract.image_to_data(
-                img,
-                lang=lang,
-                config=args,
-                output_type=Output.DICT,
-                )
+            img,
+            lang=lang,
+            config=args,
+            output_type=Output.DICT,
+        )
         df = pd.DataFrame(d)
 
         # clean up blanks
-        df1 = df[(df.conf!='-1')&(df.text!=' ')&(df.text!='')]
+        df1 = df[(df.conf != "-1") & (df.text != " ") & (df.text != "")]
         # sort blocks vertically
-        sorted_blocks = df1.groupby('block_num').first().sort_values('top').index.tolist()
+        sorted_blocks = (
+            df1.groupby("block_num").first().sort_values("top").index.tolist()
+        )
         output = []
         for block in sorted_blocks:
-            curr = df1[df1['block_num']==block]
-            sel = curr[curr.text.str.len()>3]
-            char_w = (sel.width/sel.text.str.len()).mean()
+            curr = df1[df1["block_num"] == block]
+            sel = curr[curr.text.str.len() > 3]
+            char_w = (sel.width / sel.text.str.len()).mean()
             prev_par, prev_line, prev_left = 0, 0, 0
-            text = ''
+            text = ""
             for ix, ln in curr.iterrows():
                 # add new line when necessary
-                if prev_par != ln['par_num']:
-                    text += '\n'
-                    prev_par = ln['par_num']
-                    prev_line = ln['line_num']
+                if prev_par != ln["par_num"]:
+                    text += "\n"
+                    prev_par = ln["par_num"]
+                    prev_line = ln["line_num"]
                     prev_left = 0
-                elif prev_line != ln['line_num']:
-                    text += '\n'
-                    prev_line = ln['line_num']
+                elif prev_line != ln["line_num"]:
+                    text += "\n"
+                    prev_line = ln["line_num"]
                     prev_left = 0
 
                 added = 0  # num of spaces that should be added
-                if ln['left']/char_w > prev_left + 1:
-                    added = int((ln['left'])/char_w) - prev_left
-                    text += ' ' * added
-                text += ln['text'] + ' '
-                prev_left += len(ln['text']) + added + 1
-            #text += '\n'
+                if ln["left"] / char_w > prev_left + 1:
+                    added = int((ln["left"]) / char_w) - prev_left
+                    text += " " * added
+                text += ln["text"] + " "
+                prev_left += len(ln["text"]) + added + 1
+            # text += '\n'
             output.append(text)
         return "\n".join(output)
