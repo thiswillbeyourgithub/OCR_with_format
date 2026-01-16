@@ -83,8 +83,11 @@ class OCR_with_format:
             pr = lambda x: None
         else:
             pr = print
-        assert Path(img_path).exists(), f"File not found: '{img_path}'"
-        img = cv2.imread(img_path, flags=1)
+        img_path_obj = Path(img_path)
+        assert img_path_obj.exists(), f"Path not found: '{img_path}'"
+        assert img_path_obj.is_file(), f"Path is not a file: '{img_path}'"
+        assert img_path_obj.stat().st_size > 0, f"File is empty: '{img_path}'"
+        img = cv2.imread(str(img_path), flags=1)
 
         # remove alpha layer if found
         if img.shape[2] == 4:
