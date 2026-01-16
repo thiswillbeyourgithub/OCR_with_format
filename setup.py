@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="OCR_with_format",
-    version="0.13",
+    version="0.14",
     description="Wrapper to pytesseract to preserve space and formatting",
     long_description=long_description,
     long_description_content_type="text/markdown",
