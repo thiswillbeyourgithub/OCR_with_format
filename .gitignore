@@ -1,3 +1,4 @@
 dist
 **__pycache__
 OCR_with_format.egg-info
+.aider*
